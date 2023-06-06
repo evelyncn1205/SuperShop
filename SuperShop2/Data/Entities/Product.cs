@@ -4,7 +4,7 @@ using System;
 
 namespace SuperShop2.Data.Entities
 {
-    public class Product
+    public class Product : IEntity
     {
         public int Id { get; set; }
 
