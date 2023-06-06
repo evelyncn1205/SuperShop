@@ -47,7 +47,7 @@ namespace SuperShop2.Data.Entities
                 {
                     return null;
                 }
-                return $"https://localhost:44394{ImageUrl.Substring(1)}";
+                return $"https://localhost:44379/{ImageUrl.Substring(1)}";
             }
         }
     }
