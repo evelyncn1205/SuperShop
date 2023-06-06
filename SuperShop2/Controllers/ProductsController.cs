@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using SuperShop.Data;
 using SuperShop2.Data;
 using SuperShop2.Data.Entities;
@@ -18,11 +19,15 @@ namespace SuperShop2.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IUserHelper _userHelper;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper, IImageHelper imageHelper, IConverterHelper converterHelper)
         {
           _productRepository = productRepository;
           _userHelper=userHelper;
+          _imageHelper=imageHelper;   
+          _converterHelper=converterHelper;
         }
 
         // GET: Products
@@ -67,24 +72,11 @@ namespace SuperShop2.Controllers
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    var guid = Guid.NewGuid().ToString();
-                    var file = $"{guid}.jpg";
-
-
-                    path = Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot\\images\\products",
-                        file);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/products/{file}";
+                   path = await _imageHelper.UploadImageAsync(model.ImageFile,"products");
                 }
 
-                var product = this.ToProduct(model, path);
+                
+                var product= _converterHelper.ToProduct(model, path, true);
 
                 product.User= await _userHelper.GetUserEmailAsync("evelynrx_rj@hotmail.com");
                 await _productRepository.CreateAsync(product);
@@ -93,21 +85,7 @@ namespace SuperShop2.Controllers
             return View(model);
         }
 
-        private Product ToProduct(ProductViewModel model, string path)
-        {
-            return new Product
-            {
-                Id = model.Id,
-                ImageUrl = path,
-                IsAvailable = model.IsAvailable,
-                LastPurchase = model.LastPurchase,
-                LastSale = model.LastSale,
-                Name = model.Name,
-                Price = model.Price,
-                Stock = model.Stock,
-                User = model.User
-            };
-        }
+        
 
         // GET: Products/Edit/5
         public async Task <IActionResult> Edit(int? id)
@@ -123,25 +101,12 @@ namespace SuperShop2.Controllers
                 return NotFound();
             }
 
-            var model = this.ToProductViewModel(product);
+
+            var model = _converterHelper.ToProductViewModel(product);
             return View(model);
         }
 
-        private ProductViewModel ToProductViewModel(Product product)
-        {
-            return new ProductViewModel
-            {
-                Id = product.Id,
-                IsAvailable = product.IsAvailable,
-                LastPurchase = product.LastPurchase,
-                LastSale = product.LastSale,
-                ImageUrl = product.ImageUrl,
-                Name = product.Name,
-                Price = product.Price,
-                Stock = product.Stock,
-                User = product.User
-            };
-        }
+       
 
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -155,28 +120,14 @@ namespace SuperShop2.Controllers
                 {
                     try
                     {
-
                         var path = model.ImageUrl;
 
                         if (model.ImageFile != null && model.ImageFile.Length > 0)
                         {
-                            var guid = Guid.NewGuid().ToString();
-                            var file = $"{guid}.jpg";
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "products");
+                    }
 
-                            path = Path.Combine(
-                                Directory.GetCurrentDirectory(),
-                                "wwwroot\\images\\products",
-                                file);
-
-                            using (var stream = new FileStream(path, FileMode.Create))
-                            {
-                                await model.ImageFile.CopyToAsync(stream);
-                            }
-
-                            path = $"~/images/products/{file}";
-                        }
-
-                        var product = this.ToProduct(model, path);
+                        var product = _converterHelper.ToProduct(model,path, false);
 
                         //TODO: Modificar para o user que tiver logado
                         product.User = await _userHelper.GetUserEmailAsync("rafaasfs@gmail.com");
