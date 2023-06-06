@@ -37,7 +37,7 @@ namespace SuperShop2.Data.Entities
         public double Stock { get; set; }
 
 
-        //public User User { get; set; }
+        public User User { get; set; }
 
         public string ImageFullPath
         {

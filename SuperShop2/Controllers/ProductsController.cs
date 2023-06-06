@@ -8,22 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using SuperShop.Data;
 using SuperShop2.Data;
 using SuperShop2.Data.Entities;
+using SuperShop2.Helpers;
 
 namespace SuperShop2.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly IUserHelper _userHelper;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository, IUserHelper userHelper)
         {
           _productRepository = productRepository;
+          _userHelper=userHelper;
         }
 
         // GET: Products
         public  IActionResult Index()
         {
-            return View(_productRepository.GetAll()); 
+            return View(_productRepository.GetAll().OrderBy(e=> e.Name)); 
         }
 
         // GET: Products/Details/5
@@ -58,6 +61,7 @@ namespace SuperShop2.Controllers
         {
             if (ModelState.IsValid)
             {
+                product.User= await _userHelper.GetUserEmailAsync("evelynrx_rj@hotmail.com");
                 await _productRepository.CreateAsync(product);
                 return RedirectToAction(nameof(Index));
             }
