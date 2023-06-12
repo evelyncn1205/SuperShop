@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using SuperShop2.Models;
 
 namespace SuperShop2.Controllers
 {
+    
     public class ProductsController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -53,6 +55,7 @@ namespace SuperShop2.Controllers
             return View(product);
         }
 
+        [Authorize]
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -85,8 +88,8 @@ namespace SuperShop2.Controllers
             return View(model);
         }
 
-        
 
+        [Authorize]
         // GET: Products/Edit/5
         public async Task <IActionResult> Edit(int? id)
         {
@@ -125,7 +128,7 @@ namespace SuperShop2.Controllers
                         if (model.ImageFile != null && model.ImageFile.Length > 0)
                         {
                             imageId= await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
-                         }
+                        }
 
                         var product = _converterHelper.ToProduct(model,imageId, false);
 
