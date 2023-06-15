@@ -97,6 +97,8 @@ namespace SuperShop2.Controllers
                         Username = model.Username
                     };
 
+                    await _userHelper.AddUserToRoleAsync(user,"Customer");
+
                     var result2 = await _userHelper.LoginAsync(loginViewModel);
                     if (result2.Succeeded)
                     {
