@@ -55,7 +55,7 @@ namespace SuperShop2.Controllers
             return View(product);
         }
 
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -89,7 +89,7 @@ namespace SuperShop2.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         // GET: Products/Edit/5
         public async Task <IActionResult> Edit(int? id)
         {
@@ -155,7 +155,7 @@ namespace SuperShop2.Controllers
 
 
         // GET: Products/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
