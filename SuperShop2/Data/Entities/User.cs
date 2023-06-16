@@ -8,5 +8,7 @@ namespace SuperShop2.Data.Entities
 
 
         public string LastName { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
     }
 }
