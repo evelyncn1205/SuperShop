@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.VisualBasic;
 using SuperShop.Data;
 using SuperShop2.Data;
@@ -55,7 +56,7 @@ namespace SuperShop2.Controllers
             return View(product);
         }
 
-        [Authorize(Roles ="Admin")]
+        
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -89,7 +90,7 @@ namespace SuperShop2.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        
         // GET: Products/Edit/5
         public async Task <IActionResult> Edit(int? id)
         {
@@ -155,7 +156,7 @@ namespace SuperShop2.Controllers
 
 
         // GET: Products/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -175,11 +176,29 @@ namespace SuperShop2.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            await _productRepository.DeleteAsync(product);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _productRepository.DeleteAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{product.Name} provavelmente está a ser usado!!";
+                    ViewBag.ErrorMessage = $"{product.Name} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
+                        $"Experimente primeiro apagar todas as encomendas que o estão a usar," +
+                        $"e torne novamente a apagá-lo";
+                }
+
+                return View("Error");
+            }
+
         }
 
 
