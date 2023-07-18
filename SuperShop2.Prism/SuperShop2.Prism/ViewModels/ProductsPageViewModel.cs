@@ -95,16 +95,40 @@ namespace SuperShop2.Prism.ViewModels
         {
             if (string.IsNullOrEmpty(Search))
             {
-                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p=>
+                Products = new ObservableCollection<ProductItemViewModel>(_myProducts.Select(p =>
                 new ProductItemViewModel(_navigationService)
                 {
-
-                }));
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    ImageId = p.ImageId,
+                    LastPurchase = p.LastPurchase,
+                    LastSale = p.LastSale,
+                    IsAvailable = p.IsAvailable,
+                    Stock = p.Stock,
+                    User = p.User,
+                    ImageFullPath = p.ImageFullPath
+                }).ToList());
             }
             else
             {
                 Products = new ObservableCollection<ProductItemViewModel>(
-                    _myProducts.Where(p => p.Name.ToLower().Contains(Search.ToLower())));
+                  _myProducts.Select(p =>
+                 new ProductItemViewModel(_navigationService)
+                 {
+                     Id = p.Id,
+                     Name = p.Name,
+                     Price = p.Price,
+                     ImageId = p.ImageId,
+                     LastPurchase = p.LastPurchase,
+                     LastSale = p.LastSale,
+                     IsAvailable = p.IsAvailable,
+                     Stock = p.Stock,
+                     User = p.User,
+                     ImageFullPath = p.ImageFullPath
+                 })
+                  .Where(p => p.Name.ToLower().Contains(Search.ToLower()))
+                  .ToList());
             }
         }
     }
