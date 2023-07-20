@@ -97,6 +97,33 @@ namespace SuperShop2.Prism.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Is Available.
+        /// </summary>
+        internal static string IsAvailable {
+            get {
+                return ResourceManager.GetString("IsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Last Purchase.
+        /// </summary>
+        internal static string LastPurchase {
+            get {
+                return ResourceManager.GetString("LastPurchase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Last Sale.
+        /// </summary>
+        internal static string LastSale {
+            get {
+                return ResourceManager.GetString("LastSale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Loading....
         /// </summary>
         internal static string Loading {
@@ -147,6 +174,15 @@ namespace SuperShop2.Prism.Resources {
         internal static string SearchProduct {
             get {
                 return ResourceManager.GetString("SearchProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Stock.
+        /// </summary>
+        internal static string Stock {
+            get {
+                return ResourceManager.GetString("Stock", resourceCulture);
             }
         }
     }
