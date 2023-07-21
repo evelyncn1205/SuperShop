@@ -133,6 +133,24 @@ namespace SuperShop2.Prism.Resources {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Login.
+        /// </summary>
+        internal static string Login {
+            get {
+                return ResourceManager.GetString("Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Modify User.
+        /// </summary>
+        internal static string ModifyUser {
+            get {
+                return ResourceManager.GetString("ModifyUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Name.
         /// </summary>
         internal static string Name {
@@ -174,6 +192,24 @@ namespace SuperShop2.Prism.Resources {
         internal static string SearchProduct {
             get {
                 return ResourceManager.GetString("SearchProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Show Purchase History.
+        /// </summary>
+        internal static string ShowPurchaseHistory {
+            get {
+                return ResourceManager.GetString("ShowPurchaseHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Show Shpping Car.
+        /// </summary>
+        internal static string ShowShoppingCar {
+            get {
+                return ResourceManager.GetString("ShowShoppingCar", resourceCulture);
             }
         }
         
